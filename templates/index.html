@@ -18,11 +18,16 @@
             margin-bottom: 20px;
         }
         input[type="text"] {
-            width: 80%;
+            width: 60%;
             padding: 8px;
+        }
+        input[type="date"] {
+            padding: 8px;
+            margin-left: 5px;
         }
         input[type="submit"] {
             padding: 8px 12px;
+            margin-left: 5px;
         }
         ul {
             list-style: none;
@@ -53,12 +58,13 @@
     <h1>My ToDo List</h1>
     <form action="/add" method="POST">
         <input type="text" name="title" placeholder="Enter a new task" required>
+        <input type="date" name="due_date" required>
         <input type="submit" value="Add">
     </form>
     <ul>
         {% for task in tasks %}
             <li>
-                <span>{{ task.title }}</span>
+                <span>{{ task.title }} {% if task.due_date %}- Due: {{ task.due_date }}{% endif %}</span>
                 <form method="POST" action="/delete/{{ task.id }}" style="display: inline;" onsubmit="return confirmDelete()">
                     <button type="submit" class="delete-btn">✕</button>
                 </form>
@@ -69,6 +75,12 @@
     <script>
     function confirmDelete() {
         return confirm('本当に削除してよろしいですか？');
+    }
+    
+    // Set default date to today when page loads
+    window.onload = function() {
+        const today = new Date().toISOString().split('T')[0];
+        document.querySelector('input[type="date"]').value = today;
     }
     </script>
 </body>

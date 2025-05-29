@@ -32,10 +32,11 @@ def index():
 @app.route('/add', methods=['POST'])
 def add():
     task_title = request.form.get('title')
+    due_date = request.form.get('due_date')
     if task_title:
         tasks = load_tasks()
         task_id = str(uuid.uuid4())
-        tasks.append({'id': task_id, 'title': task_title})
+        tasks.append({'id': task_id, 'title': task_title, 'due_date': due_date})
         save_tasks(tasks)
     return redirect('/')
 
