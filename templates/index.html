@@ -41,21 +41,22 @@
             justify-content: space-between;
             align-items: center;
         }
-        .delete-btn {
-            background: #ff4444;
+        .complete-btn {
+            background: #4CAF50;
             color: white;
             border: none;
             padding: 5px 8px;
             cursor: pointer;
             border-radius: 3px;
         }
-        .delete-btn:hover {
-            background: #cc0000;
+        .complete-btn:hover {
+            background: #45a049;
         }
     </style>
 </head>
 <body>
     <h1>My ToDo List</h1>
+    <a href="/history" style="display: block; text-align: center; margin-bottom: 20px; text-decoration: none; color: #0066cc; font-weight: bold;">完了したタスク</a>
     <form action="/add" method="POST">
         <input type="text" name="title" placeholder="Enter a new task" required>
         <input type="date" name="due_date" required>
@@ -65,16 +66,16 @@
         {% for task in tasks %}
             <li>
                 <span>{{ task.title }} {% if task.due_date %}- Due: {{ task.due_date }}{% endif %}</span>
-                <form method="POST" action="/delete/{{ task.id }}" style="display: inline;" onsubmit="return confirmDelete()">
-                    <button type="submit" class="delete-btn">✕</button>
+                <form method="POST" action="/complete/{{ task.id }}" style="display: inline;" onsubmit="return confirmComplete()">
+                    <button type="submit" class="complete-btn">✓</button>
                 </form>
             </li>
         {% endfor %}
     </ul>
 
     <script>
-    function confirmDelete() {
-        return confirm('本当に削除してよろしいですか？');
+    function confirmComplete() {
+        return confirm('このタスクを完了としてマークしますか？');
     }
     
     // Set default date to today when page loads

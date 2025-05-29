@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Task History</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 500px;
+            margin: 40px auto;
+            padding: 20px;
+            border: 1px solid #ccc;
+        }
+        h1 {
+            text-align: center;
+        }
+        .nav-link {
+            display: block;
+            text-align: center;
+            margin: 20px 0;
+            text-decoration: none;
+            color: #0066cc;
+            font-weight: bold;
+        }
+        .nav-link:hover {
+            text-decoration: underline;
+        }
+        ul {
+            list-style: none;
+            padding: 0;
+        }
+        li {
+            background: #f5f5f5;
+            margin-bottom: 10px;
+            padding: 10px;
+            display: flex;
+            flex-direction: column;
+        }
+        .task-title {
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        .task-date {
+            font-size: 0.9em;
+            color: #666;
+        }
+        .no-tasks {
+            text-align: center;
+            color: #666;
+            margin-top: 30px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Completed Tasks</h1>
+    <a href="/" class="nav-link">← Back to Task List</a>
+    
+    {% if tasks %}
+    <ul>
+        {% for task in tasks %}
+            <li>
+                <div class="task-title">{{ task.title }}</div>
+                <div class="task-date">
+                    {% if task.completed_date %}
+                    Completed: {{ task.completed_date.split('T')[0] }} {{ task.completed_date.split('T')[1].split('.')[0] }}
+                    {% endif %}
+                    {% if task.due_date %}
+                    <br>Due date: {{ task.due_date }}
+                    {% endif %}
+                </div>
+            </li>
+        {% endfor %}
+    </ul>
+    {% else %}
+    <p class="no-tasks">No completed tasks yet.</p>
+    {% endif %}
+</body>
+</html>
