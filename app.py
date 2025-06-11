@@ -15,6 +15,9 @@ def load_tasks():
                 if 'id' not in task:
                     task['id'] = str(uuid.uuid4())
                     updated = True
+                if 'completed' not in task:
+                    task['completed'] = False
+                    updated = True
             if updated:
                 save_tasks(tasks)
             return tasks
@@ -27,7 +30,8 @@ def save_tasks(tasks):
 @app.route('/')
 def index():
     tasks = load_tasks()
-    return render_template('index.html', tasks=tasks)
+    incomplete_tasks = [task for task in tasks if not task.get('completed', False)]
+    return render_template('index.html', tasks=incomplete_tasks)
 
 @app.route('/add', methods=['POST'])
 def add():
@@ -39,6 +43,22 @@ def add():
         tasks.append({'id': task_id, 'title': task_title, 'due_date': due_date})
         save_tasks(tasks)
     return redirect('/')
+
+@app.route('/complete/<task_id>', methods=['POST'])
+def complete_task(task_id):
+    tasks = load_tasks()
+    for task in tasks:
+        if task['id'] == task_id:
+            task['completed'] = True
+            break
+    save_tasks(tasks)
+    return redirect('/')
+
+@app.route('/history')
+def history():
+    tasks = load_tasks()
+    completed_tasks = [task for task in tasks if task.get('completed', False)]
+    return render_template('history.html', tasks=completed_tasks)
 
 @app.route('/delete/<task_id>', methods=['POST'])
 def delete_task(task_id):
